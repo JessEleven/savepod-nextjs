@@ -1,0 +1,31 @@
+{
+  "name": "savepod-nextjs",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 4040 --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "postinstall": "next telemetry disable",
+    "fix-sync": "pnpm install --no-frozen-lockfile && git add package.json pnpm-lock.yaml && git commit -m 'fix sync pnpm-lock.yaml with package.json' || echo 'No changes to commit'"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "4.1.17",
+    "next": "15.3.5",
+    "postcss": "8.5.6",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "tailwindcss": "4.1.17"
+  },
+  "devDependencies": {
+    "@types/node": "20",
+    "@types/react": "19",
+    "@types/react-dom": "19",
+    "typescript": "5"
+  },
+  "author": {
+    "name": "Jesús Rengifo Mendoza",
+    "url": "https://github.com/JessEleven"
+  },
+  "license": "MIT"
+}
