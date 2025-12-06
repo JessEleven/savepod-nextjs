@@ -1,16 +1,23 @@
 {
   "name": "savepod-nextjs",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "dev": "next dev -p 4040 --turbopack",
     "build": "next build",
     "start": "next start",
     "postinstall": "next telemetry disable",
-    "fix-sync": "pnpm install --no-frozen-lockfile && git add package.json pnpm-lock.yaml && git commit -m 'fix sync pnpm-lock.yaml with package.json' || echo 'No changes to commit'"
+    "fix-sync": "pnpm install --no-frozen-lockfile && git add package.json pnpm-lock.yaml && git commit -m 'fix sync pnpm-lock.yaml with package.json' || echo 'No changes to commit'",
+    "secret": "npx @better-auth/cli@latest secret",
+    "db:schema": "npx @better-auth/cli@latest generate --config src/libs/auth.ts",
+    "db:push": "npx drizzle-kit push && npx drizzle-kit generate",
+    "db:studio": "npx drizzle-kit studio"
   },
   "dependencies": {
     "@tailwindcss/postcss": "4.1.17",
+    "better-auth": "1.4.5",
+    "dotenv": "17.2.3",
+    "drizzle-orm": "0.44.7",
     "next": "15.3.5",
     "postcss": "8.5.6",
     "react": "19.0.0",
@@ -19,8 +26,12 @@
   },
   "devDependencies": {
     "@types/node": "20",
+    "@types/pg": "8.15.6",
     "@types/react": "19",
     "@types/react-dom": "19",
+    "drizzle-kit": "0.31.7",
+    "pg": "8.16.3",
+    "tsx": "4.21.0",
     "typescript": "5"
   },
   "author": {
