@@ -8,7 +8,7 @@ export function LoginWithGitHub() {
     try {
       await authClient.signIn.social({
         provider: 'github',
-        callbackURL: '/home',
+        callbackURL: '/overview',
       })
     } catch (err) {
       console.error('Unexpected error:', err)

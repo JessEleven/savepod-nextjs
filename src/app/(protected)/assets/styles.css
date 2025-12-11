@@ -1,0 +1,4 @@
+.icon-border {
+  @apply cursor-pointer rounded-[5px] border border-neutral-500/25 p-[5px] 
+  transition-colors duration-200 ease-in-out hover:bg-neutral-700/75;
+}
