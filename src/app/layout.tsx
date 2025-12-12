@@ -1,27 +1,30 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Roboto } from 'next/font/google'
 // @ts-expect-error
 import '../resources/globals.css'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const roboto = Roboto({
+  variable: '--font-roboto',
   subsets: ['latin'],
-})
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+  weight: ['400', '500', '700', '900'],
+  display: 'swap',
 })
 
 export const metadata: Metadata = {
   title: 'savepod',
   description: 'savepod created with next.js',
+  icons: [{ rel: 'icon', url: '/favicon.svg' }],
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang='en'>
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>{children}</body>
+      <body
+        className={`${roboto.className}`}
+        suppressHydrationWarning
+      >
+        {children}
+      </body>
     </html>
   )
 }

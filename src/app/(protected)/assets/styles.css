@@ -1,4 +1,12 @@
+@theme {
+  /* Border color and sidebar options */
+  --color-mulled-wine: #927fb2;
+}
+
+.app-transition {
+  @apply transition-colors duration-300 ease-in-out;
+}
+
 .icon-border {
-  @apply cursor-pointer rounded-[5px] border border-neutral-500/25 p-[5px] 
-  transition-colors duration-200 ease-in-out hover:bg-neutral-700/75;
+  @apply cursor-pointer rounded-[5px] border border-zinc-500/50 p-[5px] transition-colors duration-300 ease-in-out hover:bg-zinc-500/20;
 }

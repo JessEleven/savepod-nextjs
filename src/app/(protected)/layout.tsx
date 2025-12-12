@@ -2,7 +2,7 @@ import Header from './_components/header'
 import Sidebar from './_components/sidebar/sidebar'
 import { SidebarProvider } from './context/sidebar-context'
 
-export default function DashLayout({ children }: { children: React.ReactNode }) {
+export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <div className='flex h-screen bg-[#1d1e1e] text-neutral-200'>

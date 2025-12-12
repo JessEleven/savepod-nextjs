@@ -15,11 +15,11 @@ export default function Item({ href, icon, label }: Props) {
   return (
     <div className={`group relative flex items-center ${collapseSidebar && 'w-full'}`}>
       <div
-        className={`absolute left-0 h-5 w-1 rounded-r-sm transition-colors duration-300 ease-in-out ${pathname === href ? 'bg-pink-500' : 'group-hover:bg-pink-500'}`}
+        className={`app-transition absolute left-0 h-[18px] w-1 rounded-r-sm ${pathname === href ? 'bg-mulled-wine' : 'group-hover:bg-mulled-wine'}`}
       />
       <Link
         href={href}
-        className={`block w-full rounded-[5px] px-2 py-[5px] ${pathname === href ? 'bg-pink-300/10' : 'transition-colors duration-300 ease-in-out hover:bg-pink-300/10'}`}
+        className={`app-transition block w-full rounded-[5px] px-2 py-[5px] ${pathname === href ? 'bg-zinc-500/20' : 'hover:bg-zinc-500/20'}`}
       >
         <div className='flex items-center gap-x-1'>
           {icon}

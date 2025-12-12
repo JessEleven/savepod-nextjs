@@ -7,7 +7,7 @@ export default function Header() {
   const { collapseSidebar, toggleSidebar } = useSidebar()
 
   return (
-    <header className='flex h-[50px] w-full items-center justify-start border-stone-500 border-b'>
+    <header className='flex h-[55px] w-full items-center justify-start border-mulled-wine border-b'>
       <div className='ml-4'>
         <button
           type='button'
