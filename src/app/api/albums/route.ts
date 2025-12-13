@@ -1,8 +1,8 @@
 import { and, count, desc, eq } from 'drizzle-orm'
-import { NextResponse } from 'next/server'
 import { db } from '@/db/drizzle'
 import { album } from '@/db/sql/album-schema'
 import { getAuthenticatedUser } from '@/helpers/get-authenticated-user'
+import { ApiResponse } from '@/libs/api-response'
 import { generateId } from '@/utils/generate-id'
 import { pickAlbumFieldsForGet, pickAlbumFieldsForPost } from '@/utils/pick-fields/albums'
 import { isValidNanoid } from '@/utils/validate-id'
@@ -38,68 +38,45 @@ export async function GET(request: Request) {
     const buildLink = (targetPage: number) => `${baseUrl}?page=${targetPage}&limit=${limit}`
 
     if (albums.length <= 0) {
-      return NextResponse.json(
-        {
-          success: true,
-          status_code: 200,
-          message: 'The albums list is empty',
-          results: {
-            total_records: total[0].count,
-            pagination: {
-              total_pages: page,
-              current_page: limit,
-              items_per_page: 0,
-            },
-            links: {
-              base_url: baseUrl,
-              first_url: buildLink(1),
-              prev_url: null,
-              next_url: null,
-              last_url: null,
-            },
-            data: [],
-          },
+      return ApiResponse.paginated('The albums list is empty', 200, {
+        total_records: total[0].count,
+        pagination: {
+          total_pages: page,
+          current_page: limit,
+          items_per_page: 0,
         },
-        { status: 200 }
-      )
+        links: {
+          base_url: baseUrl,
+          first_url: buildLink(1),
+          prev_url: null,
+          next_url: null,
+          last_url: null,
+        },
+        data: [],
+      })
     }
     const results = albums.map(pickAlbumFieldsForGet)
 
-    return NextResponse.json(
-      {
-        success: true,
-        status_code: 200,
-        message: 'List of albums',
-        results: {
-          total_records: total[0].count,
-          pagination: {
-            total_pages: Math.ceil(total[0].count / limit),
-            current_page: page,
-            items_per_page: limit,
-          },
-          links: {
-            base_url: baseUrl,
-            first_url: buildLink(1),
-            prev_url: page > 1 ? buildLink(page - 1) : null,
-            next_url: page < totalPages ? buildLink(page + 1) : null,
-            last_url: buildLink(totalPages),
-          },
-          data: results,
-        },
+    return ApiResponse.paginated('List of albums', 200, {
+      total_records: total[0].count,
+      pagination: {
+        total_pages: Math.ceil(total[0].count / limit),
+        current_page: page,
+        items_per_page: limit,
       },
-      { status: 200 }
-    )
+      links: {
+        base_url: baseUrl,
+        first_url: buildLink(1),
+        prev_url: page > 1 ? buildLink(page - 1) : null,
+        next_url: page < totalPages ? buildLink(page + 1) : null,
+        last_url: buildLink(totalPages),
+      },
+      data: results,
+    })
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unexpected server error'
 
-    return NextResponse.json(
-      {
-        success: false,
-        status_code: 500,
-        message,
-      },
-      { status: 500 }
-    )
+    return ApiResponse.serverError(message, 500)
   }
 }
 
@@ -124,26 +101,11 @@ export async function POST(request: Request) {
 
     const pickResult = result.map(pickAlbumFieldsForPost)
 
-    return NextResponse.json(
-      {
-        success: true,
-        status_code: 201,
-        message: 'The album created successfully',
-        data: pickResult,
-      },
-      { status: 201 }
-    )
+    return ApiResponse.success('The album created successfully', 200, pickResult)
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unexpected server error'
 
-    return NextResponse.json(
-      {
-        success: false,
-        status_code: 500,
-        message,
-      },
-      { status: 500 }
-    )
+    return ApiResponse.serverError(message, 500)
   }
 }
 
@@ -156,14 +118,7 @@ export async function DELETE(request: Request) {
     const { id } = await request.json()
 
     if (!id || !isValidNanoid(id)) {
-      return NextResponse.json(
-        {
-          success: false,
-          status_code: 400,
-          message: 'The ID is missing to delete album',
-        },
-        { status: 400 }
-      )
+      return ApiResponse.clientError('The ID is missing to delete album', 400)
     }
 
     const result = await db
@@ -172,38 +127,13 @@ export async function DELETE(request: Request) {
       .returning()
 
     if (!result.length) {
-      return NextResponse.json(
-        {
-          success: false,
-          status_code: 404,
-          message: 'The album was not found',
-          data: [],
-        },
-        { status: 404 }
-      )
+      return ApiResponse.clientError('The album was not found', 404, [])
     }
 
-    return NextResponse.json(
-      {
-        success: true,
-        status_code: 200,
-        message: 'The album successfully deleted',
-        data: {
-          album_status: 'Deleted',
-        },
-      },
-      { status: 200 }
-    )
+    return ApiResponse.success('The album successfully deleted', 200, { album_status: 'Deleted' })
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unexpected server error'
 
-    return NextResponse.json(
-      {
-        success: false,
-        status_code: 500,
-        message,
-      },
-      { status: 500 }
-    )
+    return ApiResponse.serverError(message, 500)
   }
 }

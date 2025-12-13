@@ -1,5 +1,5 @@
 import { headers } from 'next/headers'
-import { NextResponse } from 'next/server'
+import { ApiResponse } from '@/libs/api-response'
 import { auth } from '@/libs/auth'
 
 export async function getAuthenticatedUser() {
@@ -11,14 +11,7 @@ export async function getAuthenticatedUser() {
 
   if (!user) {
     return {
-      error: NextResponse.json(
-        {
-          success: false,
-          status_code: 401,
-          message: 'User is not authenticated',
-        },
-        { status: 401 }
-      ),
+      error: ApiResponse.clientError('User is not authenticated', 401),
       user: null,
     }
   }
