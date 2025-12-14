@@ -15,7 +15,7 @@ export default function Headerbar({ refresh, loading, queryTime, total }: Header
 
   return (
     <div className='mt-5 flex items-center justify-between'>
-      <AlbumSectionTitle title={pathname === '/collections' ? 'Your Albums' : 'Favorite albums'} />
+      <AlbumSectionTitle title={pathname === '/albums' ? 'Your Albums' : 'Favorite albums'} />
 
       <div className='flex items-center gap-x-2.5'>
         {total && (

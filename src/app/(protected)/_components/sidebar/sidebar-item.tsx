@@ -16,9 +16,9 @@ export default function SidebarItem() {
       />
 
       <Item
-        href='/collections'
+        href='/albums'
         icon={<FolderIcon />}
-        label='Collections'
+        label='Albums'
       />
 
       <Item

@@ -18,7 +18,7 @@ export default function AlbumPage() {
     const params = new URLSearchParams(searchParams.toString())
     params.set('page', String(page))
     params.set('limit', String(limit))
-    route.push(`/collections?${params.toString()}`)
+    route.push(`/albums?${params.toString()}`)
   }
 
   const { albums, total, loading, error, queryTime, refresh, syncAfterRemove } = useAlbums(
@@ -35,7 +35,7 @@ export default function AlbumPage() {
       const params = new URLSearchParams()
       params.set('page', '1')
       params.set('limit', '10')
-      route.replace(`/collections?${params.toString()}`)
+      route.replace(`/albums?${params.toString()}`)
     }
   }, [searchParams, route])
 
