@@ -1,4 +1,3 @@
-import { relations } from 'drizzle-orm'
 import { pgTable, text, timestamp } from 'drizzle-orm/pg-core'
 import { album } from './album-schema'
 
@@ -16,7 +15,3 @@ export const image = pgTable('image', {
     .notNull()
     .references(() => album.id, { onDelete: 'cascade' }),
 })
-
-export const imageRelations = relations(image, ({ one }) => ({
-  album: one(album, { fields: [image.albumId], references: [album.id] }),
-}))

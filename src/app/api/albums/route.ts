@@ -1,10 +1,11 @@
 import { and, count, desc, eq } from 'drizzle-orm'
 import { db } from '@/db/drizzle'
 import { album } from '@/db/sql/album-schema'
+import { image } from '@/db/sql/image-schema'
 import { getAuthenticatedUser } from '@/helpers/get-authenticated-user'
 import { ApiResponse } from '@/libs/api-response'
 import { generateId } from '@/utils/generate-id'
-import { pickAlbumFieldsForGet, pickAlbumFieldsForPost } from '@/utils/pick-fields/albums'
+import { pickAlbumFieldsForGetAll, pickAlbumFieldsForPost } from '@/utils/pick-fields/albums'
 import { isValidNanoid } from '@/utils/validate-id'
 
 export async function GET(request: Request) {
@@ -18,26 +19,42 @@ export async function GET(request: Request) {
     const limit: number = parseInt(searchParams.get('limit') || '10', 10)
     const offset = (page - 1) * limit
 
-    const [albums, total]: [(typeof album.$inferSelect)[], { count: number }[]] = await Promise.all(
-      [
-        db
-          .select()
-          .from(album)
-          .where(and(eq(album.userId, user.id), eq(album.favorite, false)))
-          .orderBy(desc(album.createdAt))
-          .limit(limit)
-          .offset(offset),
-        db
-          .select({ count: count() })
-          .from(album)
-          .where(and(eq(album.userId, user.id), eq(album.favorite, false))),
-      ]
-    )
+    const albums: Array<{
+      id: string
+      title: string
+      description: string | null
+      favorite: boolean
+      createdAt: Date
+      updatedAt: Date
+      images_count: number
+    }> = await db
+      .select({
+        id: album.id,
+        title: album.title,
+        description: album.description,
+        favorite: album.favorite,
+        createdAt: album.createdAt,
+        updatedAt: album.updatedAt,
+        images_count: count(image.id),
+      })
+      .from(album)
+      .leftJoin(image, eq(image.albumId, album.id))
+      .where(and(eq(album.userId, user.id), eq(album.favorite, false)))
+      .groupBy(album.id)
+      .orderBy(desc(album.createdAt))
+      .limit(limit)
+      .offset(offset)
+
+    const total = await db
+      .select({ count: count() })
+      .from(album)
+      .where(and(eq(album.userId, user.id), eq(album.favorite, false)))
+
     const baseUrl = `${origin}/api/albums`
     const totalPages = Math.ceil(total[0].count / limit)
     const buildLink = (targetPage: number) => `${baseUrl}?page=${targetPage}&limit=${limit}`
 
-    if (albums.length <= 0) {
+    if (!albums.length) {
       return ApiResponse.paginated('The albums list is empty', 200, {
         total_records: total[0].count,
         pagination: {
@@ -55,7 +72,7 @@ export async function GET(request: Request) {
         data: [],
       })
     }
-    const results = albums.map(pickAlbumFieldsForGet)
+    const results = albums.map(pickAlbumFieldsForGetAll)
 
     return ApiResponse.paginated('List of albums', 200, {
       total_records: total[0].count,

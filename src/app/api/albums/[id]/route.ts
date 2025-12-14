@@ -4,7 +4,7 @@ import { db } from '@/db/drizzle'
 import { album } from '@/db/sql/album-schema'
 import { getAuthenticatedUser } from '@/helpers/get-authenticated-user'
 import { ApiResponse } from '@/libs/api-response'
-import { pickAlbumFieldsForGet, pickAlbumFieldsForPatch } from '@/utils/pick-fields/albums'
+import { pickAlbumFieldsById, pickAlbumFieldsForPatch } from '@/utils/pick-fields/albums'
 import { isValidNanoid } from '@/utils/validate-id'
 
 export async function GET(request: NextRequest) {
@@ -21,12 +21,16 @@ export async function GET(request: NextRequest) {
 
     const result = await db.query.album.findFirst({
       where: and(eq(album.id, id), eq(album.userId, user.id), eq(album.favorite, false)),
+      with: { images: true },
     })
 
     if (!result) {
       return ApiResponse.clientError('The album was not found', 404, [])
     }
-    const pickResult = pickAlbumFieldsForGet(result)
+    const pickResult = {
+      ...pickAlbumFieldsById(result),
+      images: result.images,
+    }
 
     return ApiResponse.success('The album successfully found', 200, pickResult)
   } catch (error) {
