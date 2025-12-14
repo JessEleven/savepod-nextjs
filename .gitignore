@@ -41,8 +41,4 @@ yarn-error.log*
 next-env.d.ts
 
 # In dev
-/src/app/(protected)/_components/ui/
-/src/app/(protected)/assets/icons/
-/src/hooks/
-/src/libs/fetch-api/
-/src/utils/
+/src/app/api/images/
