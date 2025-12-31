@@ -42,3 +42,4 @@ next-env.d.ts
 
 # In dev
 /src/app/api/images/
+/src/app/(protected)/_components/

@@ -40,42 +40,46 @@ export default function AlbumPage() {
   }, [searchParams, route])
 
   return (
-    <main>
+    <main className='mx-0 lg:mx-16'>
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
+
       <Headerbar
         total={total}
         loading={loading}
         queryTime={queryTime}
         refresh={refresh}
       />
-      {!loading && !error && total > 0 && (
-        <div className='mt-5 grid grid-cols-5 gap-2.5'>
-          {albums.map((album) => (
-            <article
-              key={album.id}
-              className='app-transition cursor-pointer rounded-lg border border-neutral-500 p-3 hover:border-neutral-500'
-            >
-              <div>
-                <Link
-                  href='#'
-                  className='block font-medium text-xl'
-                >
-                  {album.title}
-                </Link>
-                <time
-                  dateTime={dateISO(album.created_at)}
-                  className='mt-1.5 text-xs'
-                >
-                  {dateFormat(album.created_at)}
-                </time>
-              </div>
-              <p>{album.description}</p>
-              {album.images_count}
-            </article>
-          ))}
-        </div>
-      )}
+
+      <div className='mt-5 h-[500px] overflow-auto'>
+        {!loading && !error && total > 0 && (
+          <div className='grid grid-cols-1 gap-2.5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6'>
+            {albums.map((album) => (
+              <article
+                key={album.id}
+                className='app-transition cursor-pointer rounded-lg border border-neutral-500 p-3 hover:border-neutral-500'
+              >
+                <div>
+                  <Link
+                    href={`/albums/${album.id}`}
+                    className='block font-medium text-lg'
+                  >
+                    <span>{album.title}</span>
+                  </Link>
+
+                  <time
+                    dateTime={dateISO(album.created_at)}
+                    className='mt-1.5 text-xs'
+                  >
+                    {dateFormat(album.created_at)}
+                  </time>
+                </div>
+                {album.images_count}
+              </article>
+            ))}
+          </div>
+        )}
+      </div>
     </main>
   )
 }

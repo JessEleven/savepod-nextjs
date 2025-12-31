@@ -23,6 +23,7 @@ export default function Headerbar({ refresh, loading, queryTime, total }: Header
             {total} {total === 1 ? 'album' : 'albums'} • {queryTime} ms
           </h3>
         )}
+
         <button
           type='button'
           aria-label='Refresh'
@@ -33,13 +34,11 @@ export default function Headerbar({ refresh, loading, queryTime, total }: Header
         </button>
 
         <Link
-          href='#'
-          className='block'
+          href='/new-album'
+          className='flex items-center gap-x-1.5 text-sm'
         >
-          <div className='flex items-center gap-x-1.5 text-sm'>
-            <FolderPlusIcon />
-            <span>New album</span>
-          </div>
+          <FolderPlusIcon />
+          <span>New album</span>
         </Link>
       </div>
     </div>

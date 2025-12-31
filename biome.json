@@ -39,6 +39,9 @@
       },
       "complexity": {
         "noStaticOnlyClass": "off"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "off"
       }
     }
   },

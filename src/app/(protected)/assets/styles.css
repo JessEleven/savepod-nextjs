@@ -1,6 +1,8 @@
 @theme {
   /* Border color and sidebar options */
   --color-mulled-wine: #927fb2;
+
+  --radius-five: 5px;
 }
 
 .app-transition {
@@ -8,5 +10,22 @@
 }
 
 .icon-border {
-  @apply cursor-pointer rounded-[5px] border border-zinc-500/50 p-[5px] transition-colors duration-300 ease-in-out hover:bg-zinc-500/20;
+  @apply cursor-pointer rounded-five border border-zinc-500/50 p-[5px] transition-colors duration-300 ease-in-out hover:bg-zinc-500/20;
+}
+
+/* Custom scrollbar */
+.scrollbar-custom::-webkit-scrollbar {
+  width: 12px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background-color: #3f3f46;
+  border-radius: 100px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  cursor: default;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: transparent;
 }
